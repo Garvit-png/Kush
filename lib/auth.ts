@@ -8,17 +8,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    // Attach user id (email used as stable identifier) to session
     async session({ session, token }) {
       if (session.user && token.sub) {
         (session.user as any).id = token.sub;
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // Always redirect back to home after sign in
+      if (url.startsWith(baseUrl)) return url;
+      return baseUrl;
+    },
   },
-  pages: {
-    signIn: "/", // redirect back to landing on sign-in
-  },
+  trustHost: true, // Required for Vercel deployments
 });
