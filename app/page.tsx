@@ -9,22 +9,36 @@ import Courses from "./components/Courses";
 import Footer from "./components/Footer";
 import CourseModal from "./components/CourseModal";
 import CoursePlayer from "./components/CoursePlayer";
+import { useRazorpay } from "./hooks/useRazorpay";
 
 type View = "landing" | "modal" | "player";
 
 export default function Home() {
   const [view, setView] = useState<View>("landing");
   const [isPurchased, setIsPurchased] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  function handleBuy() {
-    // Toggle purchase — wire real payment later
-    setIsPurchased((prev) => !prev);
-    setView("player");
+  const { initPayment } = useRazorpay();
+
+  async function handleBuy() {
+    setIsProcessing(true);
+    await initPayment({
+      onSuccess: (paymentId) => {
+        console.log("Payment successful:", paymentId);
+        setIsPurchased(true);
+        setView("player");
+        setIsProcessing(false);
+      },
+      onFailure: () => {
+        setIsProcessing(false);
+      },
+    });
+    setIsProcessing(false);
   }
 
   return (
     <>
-      {/* Landing page — always mounted, hidden behind player */}
+      {/* Landing page */}
       <div style={{ display: view === "player" ? "none" : "block" }}>
         <Navbar />
         <Hero onStartLearning={() => setView("modal")} />
@@ -40,6 +54,7 @@ export default function Home() {
           onExplore={() => setView("player")}
           onBuy={handleBuy}
           onClose={() => setView("landing")}
+          isProcessing={isProcessing}
         />
       )}
 
@@ -49,6 +64,7 @@ export default function Home() {
           isPurchased={isPurchased}
           onBuy={handleBuy}
           onClose={() => setView("landing")}
+          isProcessing={isProcessing}
         />
       )}
     </>

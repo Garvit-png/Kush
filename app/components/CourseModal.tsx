@@ -7,9 +7,10 @@ interface CourseModalProps {
   onExplore: () => void;
   onBuy: () => void;
   onClose: () => void;
+  isProcessing?: boolean;
 }
 
-export default function CourseModal({ onExplore, onBuy, onClose }: CourseModalProps) {
+export default function CourseModal({ onExplore, onBuy, onClose, isProcessing = false }: CourseModalProps) {
   return (
     <div className="cm-overlay" onClick={onClose}>
       <div className="cm-card" onClick={(e) => e.stopPropagation()}>
@@ -56,8 +57,8 @@ export default function CourseModal({ onExplore, onBuy, onClose }: CourseModalPr
               Explore Course
               <i className="fas fa-arrow-right" />
             </button>
-            <button className="cm-btn cm-btn--buy" onClick={onBuy}>
-              Buy Now · {COURSE.price}
+            <button className="cm-btn cm-btn--buy" onClick={onBuy} disabled={isProcessing}>
+              {isProcessing ? "Processing…" : `Buy Now · ${COURSE.price}`}
             </button>
           </div>
         </div>

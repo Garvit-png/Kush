@@ -7,9 +7,10 @@ interface CoursePlayerProps {
   isPurchased: boolean;
   onBuy: () => void;
   onClose: () => void;
+  isProcessing?: boolean;
 }
 
-export default function CoursePlayer({ isPurchased, onBuy, onClose }: CoursePlayerProps) {
+export default function CoursePlayer({ isPurchased, onBuy, onClose, isProcessing = false }: CoursePlayerProps) {
   const [activeVideo, setActiveVideo] = useState<Video>(COURSE.topics[0].videos[0]);
   const [expandedTopics, setExpandedTopics] = useState<string[]>([COURSE.topics[0].id]);
 
@@ -41,8 +42,9 @@ export default function CoursePlayer({ isPurchased, onBuy, onClose }: CoursePlay
           <span className="cp-topbar-course">{COURSE.title}</span>
         </div>
         {!isPurchased && (
-          <button className="cp-buy-pill" onClick={onBuy}>
-            <i className="fas fa-unlock-alt" /> Buy to Unlock All · {COURSE.price}
+          <button className="cp-buy-pill" onClick={onBuy} disabled={isProcessing}>
+            <i className="fas fa-unlock-alt" />
+            {isProcessing ? "Processing…" : `Buy to Unlock All · ${COURSE.price}`}
           </button>
         )}
         {isPurchased && (
@@ -157,8 +159,9 @@ export default function CoursePlayer({ isPurchased, onBuy, onClose }: CoursePlay
                     </div>
                     <h3>This video is locked</h3>
                     <p>Purchase the course to unlock all {totalVideos} videos</p>
-                    <button className="cp-player-unlock-btn" onClick={onBuy}>
-                      <i className="fas fa-unlock-alt" /> Unlock Full Course · {COURSE.price}
+                    <button className="cp-player-unlock-btn" onClick={onBuy} disabled={isProcessing}>
+                      <i className="fas fa-unlock-alt" />
+                      {isProcessing ? "Processing…" : `Unlock Full Course · ${COURSE.price}`}
                     </button>
                   </div>
                 </div>
@@ -191,8 +194,8 @@ export default function CoursePlayer({ isPurchased, onBuy, onClose }: CoursePlay
                   <span>Get full access to all topics and videos</span>
                 </div>
               </div>
-              <button className="cp-locked-banner-btn" onClick={onBuy}>
-                Buy Now · {COURSE.price}
+              <button className="cp-locked-banner-btn" onClick={onBuy} disabled={isProcessing}>
+                {isProcessing ? "Processing…" : `Buy Now · ${COURSE.price}`}
               </button>
             </div>
           )}
