@@ -67,6 +67,15 @@ body {
   background: linear-gradient(180deg, #cb8a59, #463126, #171717);
 }
 
+.avatar-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
 .header__name {
   font-family: var(--font-poppins), 'Poppins', sans-serif;
   font-size: 16px;
