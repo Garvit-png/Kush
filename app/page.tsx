@@ -15,33 +15,51 @@ import { useRazorpay } from "./hooks/useRazorpay";
 type View = "landing" | "modal" | "player";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [view, setView] = useState<View>("landing");
   const [isPurchased, setIsPurchased] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [accessChecked, setAccessChecked] = useState(false);
 
   const { initPayment } = useRazorpay();
 
-  // On login — check if user already purchased this course (any device)
+  // When user logs in — check if they already purchased on any device
   useEffect(() => {
     if (!session?.user?.email) return;
-
     fetch(`/api/check-access?email=${encodeURIComponent(session.user.email)}&course_id=aesthetic-mastery`)
       .then((r) => r.json())
       .then(({ hasPurchased }) => {
         setIsPurchased(hasPurchased);
-        setAccessChecked(true);
       });
   }, [session?.user?.email]);
 
-  async function handleBuy() {
-    // Must be logged in first
+  // "Explore Course" — login required, then opens player (locked if not purchased)
+  function handleExplore() {
+    if (status === "loading") return;
     if (!session?.user?.email) {
-      signIn("google");
+      // Save intent, redirect to Google login
+      signIn("google", { callbackUrl: window.location.href });
+      return;
+    }
+    setView("player");
+  }
+
+  // "Buy Now" — login required, then Razorpay, then unlock
+  async function handleBuy() {
+    if (status === "loading") return;
+
+    // Step 1: must be logged in
+    if (!session?.user?.email) {
+      signIn("google", { callbackUrl: window.location.href });
       return;
     }
 
+    // Step 2: already purchased? just open player
+    if (isPurchased) {
+      setView("player");
+      return;
+    }
+
+    // Step 3: initiate Razorpay payment
     setIsProcessing(true);
     await initPayment({
       userEmail: session.user.email,
@@ -50,13 +68,16 @@ export default function Home() {
         setView("player");
         setIsProcessing(false);
       },
-      onFailure: () => setIsProcessing(false),
+      onFailure: () => {
+        setIsProcessing(false);
+      },
     });
     setIsProcessing(false);
   }
 
   return (
     <>
+      {/* Landing page */}
       <div style={{ display: view === "player" ? "none" : "block" }}>
         <Navbar />
         <Hero onStartLearning={() => setView("modal")} />
@@ -66,15 +87,17 @@ export default function Home() {
         <Footer />
       </div>
 
+      {/* Course modal — thumbnail + CTA */}
       {view === "modal" && (
         <CourseModal
-          onExplore={() => setView("player")}
+          onExplore={handleExplore}
           onBuy={handleBuy}
           onClose={() => setView("landing")}
           isProcessing={isProcessing}
         />
       )}
 
+      {/* Course player — locked until purchased */}
       {view === "player" && (
         <CoursePlayer
           isPurchased={isPurchased}
