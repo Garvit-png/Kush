@@ -8,18 +8,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  callbacks: {
-    async session({ session, token }) {
-      if (session.user && token.sub) {
-        (session.user as any).id = token.sub;
-      }
-      return session;
-    },
-    async redirect({ url, baseUrl }) {
-      // Always redirect back to home after sign in
-      if (url.startsWith(baseUrl)) return url;
-      return baseUrl;
-    },
-  },
-  trustHost: true, // Required for Vercel deployments
+  trustHost: true,
+  // No database adapter — pure JWT sessions (stateless)
+  // User email is available in session.user.email — that's all we need
 });
