@@ -1,13 +1,15 @@
-import Image from "next/image";
-import DotFieldBackground from "./DotFieldBackground";
+"use client";
 
-export default function Hero() {
+import Image from "next/image";
+
+interface HeroProps {
+  onStartLearning: () => void;
+}
+
+export default function Hero({ onStartLearning }: HeroProps) {
   return (
     <section className="hero">
-      {/* Dots only on this section */}
-      <DotFieldBackground />
-
-      <div className="hero__dot hero__dot--top"></div>
+      <div className="hero__dot"></div>
 
       {/* LEFT */}
       <div className="hero__left">
@@ -36,7 +38,9 @@ export default function Hero() {
           our expert-led courses.
         </p>
 
-        <button className="btn btn--dark">Start Learning Now</button>
+        <button className="btn btn--dark" onClick={onStartLearning}>
+          Start Learning Now
+        </button>
       </div>
 
       {/* RIGHT */}
