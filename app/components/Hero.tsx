@@ -1,8 +1,29 @@
+"use client";
+
 import Image from "next/image";
+import DotField from "./DotField";
 
 export default function Hero() {
   return (
     <section className="hero">
+      {/* DotField background */}
+      <div className="hero__dotfield-bg">
+        <DotField
+          dotRadius={1.5}
+          dotSpacing={14}
+          bulgeStrength={67}
+          glowRadius={160}
+          sparkle={false}
+          waveAmplitude={0}
+          cursorRadius={500}
+          cursorForce={0.1}
+          bulgeOnly={true}
+          gradientFrom="#A855F7"
+          gradientTo="#B497CF"
+          glowColor="#120F17"
+        />
+      </div>
+
       <div className="hero__dot hero__dot--top"></div>
 
       {/* LEFT */}

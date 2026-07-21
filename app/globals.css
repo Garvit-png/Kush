@@ -95,6 +95,25 @@ body {
   justify-content: space-between;
   align-items: center;
   position: relative;
+  overflow: hidden;
+}
+
+/* DotField background */
+.hero__dotfield-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Everything inside hero sits above the dotfield */
+.hero__dot,
+.hero__left,
+.hero__right {
+  position: relative;
+  z-index: 1;
 }
 
 .hero__dot {
