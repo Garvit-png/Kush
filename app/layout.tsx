@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
+import DotFieldBackground from "./components/DotFieldBackground";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -30,13 +31,15 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
       <head>
-        {/* Font Awesome — external CDN, no npm package available */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <DotFieldBackground />
+        {children}
+      </body>
     </html>
   );
 }
