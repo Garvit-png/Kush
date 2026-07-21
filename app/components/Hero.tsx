@@ -1,8 +1,12 @@
 import Image from "next/image";
+import DotFieldBackground from "./DotFieldBackground";
 
 export default function Hero() {
   return (
     <section className="hero">
+      {/* Dots only on this section */}
+      <DotFieldBackground />
+
       <div className="hero__dot hero__dot--top"></div>
 
       {/* LEFT */}

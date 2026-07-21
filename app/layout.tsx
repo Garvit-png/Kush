@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
-import DotFieldBackground from "./components/DotFieldBackground";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -37,7 +36,6 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <DotFieldBackground />
         {children}
       </body>
     </html>

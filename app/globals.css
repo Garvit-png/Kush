@@ -10,16 +10,13 @@
 
 html {
   scroll-behavior: smooth;
-  background: #ffffff;
 }
 
 body {
-  background: transparent;
+  background: #ffffff;
   overflow-x: hidden;
   font-family: var(--font-inter), 'Inter', sans-serif;
   color: #111;
-  position: relative;
-  z-index: 1;
 }
 
 /* =========================================
@@ -98,6 +95,15 @@ body {
   justify-content: space-between;
   align-items: center;
   position: relative;
+  overflow: hidden;
+}
+
+/* Hero content above dotfield */
+.hero__dot,
+.hero__left,
+.hero__right {
+  position: relative;
+  z-index: 1;
 }
 
 .hero__dot {
@@ -299,13 +305,18 @@ body {
   border-radius: 12px;
   padding: 28px 20px;
   text-align: center;
-  transition: 0.35s;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
   cursor: pointer;
 }
 
 .stats__card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.18);
+  transform: translateY(-10px) scale(1.04);
+  box-shadow: 0 30px 55px rgba(0, 0, 0, 0.25);
+  background: #1a1a1a;
+}
+
+.stats__card:hover .stats__value {
+  text-shadow: 0 0 20px rgba(45, 216, 111, 0.5);
 }
 
 .stats__value {
