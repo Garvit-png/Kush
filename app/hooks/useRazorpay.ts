@@ -1,14 +1,9 @@
 "use client";
 
-// Razorpay loads via script tag — this hook handles that
 export function useRazorpay() {
   function loadScript(): Promise<boolean> {
     return new Promise((resolve) => {
-      // Already loaded
-      if ((window as any).Razorpay) {
-        resolve(true);
-        return;
-      }
+      if ((window as any).Razorpay) { resolve(true); return; }
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.onload = () => resolve(true);
@@ -18,20 +13,21 @@ export function useRazorpay() {
   }
 
   async function initPayment({
+    userEmail,
     onSuccess,
     onFailure,
   }: {
+    userEmail: string;
     onSuccess: (paymentId: string) => void;
     onFailure?: (error: unknown) => void;
   }) {
-    // 1. Load Razorpay SDK
     const loaded = await loadScript();
     if (!loaded) {
       alert("Failed to load Razorpay. Check your internet connection.");
       return;
     }
 
-    // 2. Create order on your backend
+    // Create order on backend
     let orderId: string;
     let amount: number;
     try {
@@ -46,7 +42,6 @@ export function useRazorpay() {
       return;
     }
 
-    // 3. Open Razorpay checkout popup
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount,
@@ -55,8 +50,8 @@ export function useRazorpay() {
       description: "Aesthetic Mastery — Full Course Access",
       order_id: orderId,
       theme: { color: "#111111" },
+      prefill: { email: userEmail },
 
-      // 4. On successful payment — verify on backend
       handler: async function (response: {
         razorpay_payment_id: string;
         razorpay_order_id: string;
@@ -70,10 +65,11 @@ export function useRazorpay() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
+              user_email: userEmail,
+              course_id: "aesthetic-mastery",
             }),
           });
           const verifyData = await verifyRes.json();
-
           if (verifyData.success) {
             onSuccess(response.razorpay_payment_id);
           } else {
@@ -86,17 +82,8 @@ export function useRazorpay() {
         }
       },
 
-      prefill: {
-        // Pre-fill user details if you have them
-        name: "",
-        email: "",
-        contact: "",
-      },
-
       modal: {
-        ondismiss: () => {
-          console.log("Razorpay modal closed by user");
-        },
+        ondismiss: () => console.log("Razorpay modal closed"),
       },
     };
 

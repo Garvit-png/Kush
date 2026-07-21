@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Inter } from "next/font/google";
+import SessionWrapper from "./components/SessionWrapper";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -30,13 +31,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
       <head>
+        {/* Font Awesome — external CDN, no npm package available */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         />
       </head>
       <body>
-        {children}
+        <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>
   );
