@@ -58,7 +58,7 @@ export default function CourseModal({ onExplore, onBuy, onClose, isProcessing = 
               <i className="fas fa-arrow-right" />
             </button>
             <button className="cm-btn cm-btn--buy" onClick={onBuy} disabled={isProcessing}>
-              {isProcessing ? "Processing…" : `Buy Now · ${COURSE.price}`}
+              {isProcessing ? "Processing…" : "Buy Now"}
             </button>
           </div>
         </div>

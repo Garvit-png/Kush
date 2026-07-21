@@ -44,7 +44,7 @@ export default function CoursePlayer({ isPurchased, onBuy, onClose, isProcessing
         {!isPurchased && (
           <button className="cp-buy-pill" onClick={onBuy} disabled={isProcessing}>
             <i className="fas fa-unlock-alt" />
-            {isProcessing ? "Processing…" : `Buy to Unlock All · ${COURSE.price}`}
+            {isProcessing ? "Processing…" : "Buy to Unlock All"}
           </button>
         )}
         {isPurchased && (
@@ -161,7 +161,7 @@ export default function CoursePlayer({ isPurchased, onBuy, onClose, isProcessing
                     <p>Purchase the course to unlock all {totalVideos} videos</p>
                     <button className="cp-player-unlock-btn" onClick={onBuy} disabled={isProcessing}>
                       <i className="fas fa-unlock-alt" />
-                      {isProcessing ? "Processing…" : `Unlock Full Course · ${COURSE.price}`}
+                      {isProcessing ? "Processing…" : "Unlock Full Course"}
                     </button>
                   </div>
                 </div>
@@ -195,7 +195,7 @@ export default function CoursePlayer({ isPurchased, onBuy, onClose, isProcessing
                 </div>
               </div>
               <button className="cp-locked-banner-btn" onClick={onBuy} disabled={isProcessing}>
-                {isProcessing ? "Processing…" : `Buy Now · ${COURSE.price}`}
+                {isProcessing ? "Processing…" : "Buy Now"}
               </button>
             </div>
           )}
